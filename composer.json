@@ -1,20 +1,23 @@
 {
-    "name": "warriorxk/php-rados",
-    "description": "An object-oriented wrapper for the librados PHP bindings",
-    "type": "library",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Kevin Meijer",
-            "email": "admin@kevinmeijer.nl"
-        }
-    ],
-    "require": {
-        "ext-rados": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "": "src/"
-        }
+  "name": "warriorxk/php-rados",
+  "description": "An object-oriented wrapper for the librados PHP bindings",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Kevin Meijer",
+      "email": "admin@kevinmeijer.nl"
     }
+  ],
+  "require": {
+    "ext-rados": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "": "src/"
+    },
+    "files": [
+      "src/WarriorXK/PHPRados/functions.php"
+    ]
+  }
 }

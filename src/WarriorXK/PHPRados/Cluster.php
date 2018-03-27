@@ -22,6 +22,14 @@ class Cluster {
      */
     protected $_clusterResource = NULL;
 
+    /**
+     * @param string|NULL $configFile
+     * @param string|NULL $user
+     * @param string|NULL $cluster
+     * @param bool        $connect
+     *
+     * @throws \WarriorXK\PHPRados\Exception
+     */
     public function __construct(string $configFile = NULL, string $user = NULL, string $cluster = NULL, bool $connect = TRUE) {
 
         if ($user !== NULL || $cluster) {
