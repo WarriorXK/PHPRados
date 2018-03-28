@@ -118,6 +118,59 @@ class Pool {
     }
 
     /**
+     * @param string   $objectID
+     * @param resource $stream
+     * @param int      $size
+     * @param int      $offset
+     * @param int      $chunkSize
+     *
+     * @return int
+     * @throws \WarriorXK\PHPRados\Exception
+     */
+    public function readObjectToStream(string $objectID, $stream, int $size = 0, $offset = 0, int $chunkSize = 10000000) : int {
+
+        if (!is_resource($stream)) {
+            throw new \InvalidArgumentException('The second parameter has to be a resource!');
+        }
+
+        $meta = stream_get_meta_data($stream);
+        if (strpos($meta['mode'], 'w') === FALSE) {
+            throw new \InvalidArgumentException('The provided stream is not write-able!');
+        }
+
+        $objectSize = (int) $this->statObject($objectID)->getSize(PHPRADOS_UNIT_B);
+        if ($size <= 0) {
+            $size = $objectSize;
+        }
+
+        if ($offset + $size > $objectSize) {
+            throw new \OutOfBoundsException('Offset + size exceeds the size of the object!');
+        }
+
+        $totalBytesWritten = 0;
+        $currentOffset = $offset;
+
+        do {
+
+            $sizeToRead = min($size - $currentOffset, $chunkSize);
+
+            $data = $this->readObject($objectID, $sizeToRead, $currentOffset);
+            $dataLen = strlen($data);
+            $bytesWritten = 0;
+
+            do {
+                $bytesWritten += fwrite($stream, $data);
+            } while ($bytesWritten < $dataLen);
+
+            $totalBytesWritten += $bytesWritten;
+            $currentOffset += $bytesWritten;
+
+        } while ($currentOffset < ($size - $offset));
+
+        return $totalBytesWritten;
+    }
+
+    /**
      * @param string $objectID
      * @param int    $size
      * @param int    $offset
