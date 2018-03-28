@@ -183,7 +183,7 @@ function rados_ioctx_pool_set_auid($ioctx, $auid) {
  *
  * @return int|bool|array
  */
-function rados_ioctx_pool_get_auid() {
+function rados_ioctx_pool_get_auid($ioctx) {
 
 }
 

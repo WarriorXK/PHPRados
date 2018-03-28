@@ -32,7 +32,7 @@ class Cluster {
      */
     public function __construct(string $configFile = NULL, string $user = NULL, string $cluster = NULL, bool $connect = TRUE) {
 
-        if ($user !== NULL || $cluster) {
+        if ($user !== NULL || $cluster !== NULL) {
             $this->_clusterResource = \rados_create2((string) $cluster, (string) $user);
         } else {
             $this->_clusterResource = \rados_create();
@@ -163,12 +163,16 @@ class Cluster {
      * @param string $name
      * @param array  $options
      *
-     * @return array|bool
+     * @return bool
      * @throws \WarriorXK\PHPRados\Exception
      */
-    public function createPool(string $name, array $options = []) {
+    public function createPool(string $name, array $options = []) : bool {
 
-        $ret = \rados_pool_create($this->_clusterResource, $name, $options);
+        if (!empty($options)) {
+            $ret = \rados_pool_create($this->_clusterResource, $name, $options);
+        } else {
+            $ret = \rados_pool_create($this->_clusterResource, $name);
+        }
 
         $exception = Exception::FromReturnValue($ret);
         if ($exception !== NULL) {
@@ -197,11 +201,11 @@ class Cluster {
     }
 
     /**
-     * @return \WarriorXK\PHPRados\PoolStat
+     * @return \WarriorXK\PHPRados\ClusterStat
      * @throws \WarriorXK\PHPRados\Exception
      */
-    public function stat() : PoolStat {
-        return new PoolStat($this->_clusterResource);
+    public function stat() : ClusterStat {
+        return new ClusterStat($this->_clusterResource);
     }
 
     /**
@@ -255,10 +259,10 @@ class Cluster {
     /**
      * @param string $name
      *
-     * @return \WarriorXK\PHPRados\PoolIOContext
+     * @return \WarriorXK\PHPRados\Pool
      * @throws \WarriorXK\PHPRados\Exception
      */
-    public function getPoolIOContextByName(string $name) : PoolIOContext {
+    public function getPoolIOContextByName(string $name) : Pool {
 
         $ret = \rados_ioctx_create($this->_clusterResource, $name);
 
@@ -267,16 +271,16 @@ class Cluster {
             throw $exception;
         }
 
-        return new PoolIOContext($ret);
+        return new Pool($this->_clusterResource, $ret);
     }
 
     /**
      * @param int $id
      *
-     * @return \WarriorXK\PHPRados\PoolIOContext
+     * @return \WarriorXK\PHPRados\Pool
      * @throws \WarriorXK\PHPRados\Exception
      */
-    public function getPoolIOContextByID(int $id) : PoolIOContext {
+    public function getPoolIOContextByID(int $id) : Pool {
 
         $ret = \rados_ioctx_create2($this->_clusterResource, $id);
 
@@ -285,7 +289,7 @@ class Cluster {
             throw $exception;
         }
 
-        return new PoolIOContext($ret);
+        return new Pool($this->_clusterResource, $ret);
     }
 
     /**
