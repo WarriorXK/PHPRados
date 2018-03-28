@@ -67,8 +67,8 @@ class ObjectStat {
      *
      * @return float
      */
-    public function getSize(string $unit = PHPRADOS_UNIT_KB) : float {
-        return convertFormat(PHPRADOS_UNIT_KB, $unit, $this->_psize);
+    public function getSize(string $unit = PHPRADOS_UNIT_B) : float {
+        return convertFormat(PHPRADOS_UNIT_B, $unit, $this->_psize);
     }
 
     /**

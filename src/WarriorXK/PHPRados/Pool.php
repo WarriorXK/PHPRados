@@ -128,7 +128,7 @@ class Pool {
     public function readObject(string $objectID, int $size = 0, $offset = 0) : string {
 
         if ($size <= 0) {
-            $size = $this->statObject($objectID)->getSize();
+            $size = (int) $this->statObject($objectID)->getSize(PHPRADOS_UNIT_B);
         }
 
         $ret = \rados_read($this->_poolResource, $objectID, $size, $offset);
@@ -315,6 +315,7 @@ class Pool {
 
     /**
      * @return \WarriorXK\PHPRados\PoolStat
+     * @throws \WarriorXK\PHPRados\Exception
      */
     public function stat() : PoolStat {
         return new PoolStat($this->_poolResource);
