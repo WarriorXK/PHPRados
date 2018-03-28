@@ -17,7 +17,8 @@
       "": "src/"
     },
     "files": [
-      "src/WarriorXK/PHPRados/functions.php"
+      "src/WarriorXK/PHPRados/functions.php",
+      "src/WarriorXK/PHPRados/defines.php"
     ]
   }
 }
