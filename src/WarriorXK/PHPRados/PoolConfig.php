@@ -6,6 +6,8 @@
  * Time: 18:18
  */
 
+declare(strict_types = 1);
+
 namespace WarriorXK\PHPRados;
 
 class PoolConfig implements \ArrayAccess {

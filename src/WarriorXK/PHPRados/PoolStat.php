@@ -6,6 +6,8 @@
  * Time: 09:25
  */
 
+declare(strict_types = 1);
+
 namespace WarriorXK\PHPRados;
 
 class PoolStat implements \JsonSerializable {
@@ -151,9 +153,9 @@ class PoolStat implements \JsonSerializable {
     /**
      * @param string $unit
      *
-     * @return int
+     * @return float
      */
-    public function getUsedSpace(string $unit = PHPRADOS_UNIT_KB) : int {
+    public function getUsedSpace(string $unit = PHPRADOS_UNIT_KB) : float {
         return convertFormat($this->_num_bytes, PHPRADOS_UNIT_B, $unit);
     }
 

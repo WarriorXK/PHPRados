@@ -6,6 +6,8 @@
  * Time: 19:27
  */
 
+declare(strict_types = 1);
+
 namespace WarriorXK\PHPRados;
 
 class ClusterStat {
@@ -68,27 +70,27 @@ class ClusterStat {
     /**
      * @param string $unit
      *
-     * @return int
+     * @return float
      */
-    public function getAvailableSpace(string $unit) : int {
+    public function getAvailableSpace(string $unit = PHPRADOS_UNIT_KB) : float {
         return convertFormat(PHPRADOS_UNIT_KB, $unit, $this->_kbAvailable);
     }
 
     /**
      * @param string $unit
      *
-     * @return int
+     * @return float
      */
-    public function getUsedSpace(string $unit) : int {
+    public function getUsedSpace(string $unit = PHPRADOS_UNIT_KB) : float {
         return convertFormat(PHPRADOS_UNIT_KB, $unit, $this->_kbUsed);
     }
 
     /**
      * @param string $unit
      *
-     * @return int
+     * @return float
      */
-    public function getSpace(string $unit) : int {
+    public function getSpace(string $unit = PHPRADOS_UNIT_KB) : float {
         return convertFormat(PHPRADOS_UNIT_KB, $unit, $this->_kb);
     }
 

@@ -6,6 +6,8 @@
  * Time: 18:29
  */
 
+declare(strict_types = 1);
+
 namespace WarriorXK\PHPRados;
 
 class ObjectStat {
@@ -63,9 +65,9 @@ class ObjectStat {
     /**
      * @param string $unit
      *
-     * @return int
+     * @return float
      */
-    public function getSize(string $unit) : int {
+    public function getSize(string $unit = PHPRADOS_UNIT_KB) : float {
         return convertFormat($this->_psize, PHPRADOS_UNIT_KB, $unit);
     }
 
