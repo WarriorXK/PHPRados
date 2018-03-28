@@ -156,7 +156,39 @@ class PoolStat implements \JsonSerializable {
      * @return float
      */
     public function getUsedSpace(string $unit = PHPRADOS_UNIT_KB) : float {
-        return convertFormat($this->_num_bytes, PHPRADOS_UNIT_B, $unit);
+        return convertFormat(PHPRADOS_UNIT_B, $unit, $this->_num_bytes);
+    }
+
+    /**
+     * @param string $unit
+     *
+     * @return float
+     */
+    public function getAmountWritten(string $unit = PHPRADOS_UNIT_KB) : float {
+        return convertFormat(PHPRADOS_UNIT_KB, $unit, $this->_num_wr_kb);
+    }
+
+    /**
+     * @param string $unit
+     *
+     * @return float
+     */
+    public function getAmountRead(string $unit = PHPRADOS_UNIT_KB) : float {
+        return convertFormat(PHPRADOS_UNIT_KB, $unit, $this->_num_rd_kb);
+    }
+
+    /**
+     * @return int
+     */
+    public function getWriteCount() : int {
+        return $this->_num_wr;
+    }
+
+    /**
+     * @return int
+     */
+    public function getReadCount() : int {
+        return $this->_num_rd;
     }
 
     /**
