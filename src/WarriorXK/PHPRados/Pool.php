@@ -95,15 +95,59 @@ class Pool {
 
     /**
      * @param string $objectID
+     * @param        $stream
+     * @param int    $limit
+     * @param int    $chunkSize
+     *
+     * @return int
+     * @throws \WarriorXK\PHPRados\Exception
+     */
+    public function writeObjectFromStream(string $objectID, $stream, int $limit = 0, int $chunkSize = 10000000) {
+
+        if (!is_resource($stream)) {
+            throw new \InvalidArgumentException('The second parameter has to be a resource!');
+        }
+
+        $meta = stream_get_meta_data($stream);
+        if (strpos($meta['mode'], 'r') === FALSE) {
+            throw new \InvalidArgumentException('The provided stream is not read-able!');
+        }
+
+        $totalBytesRead = 0;
+
+        // Ensure it exists and is empty
+        $this->truncateObject($objectID, 0);
+
+        do {
+
+            $length = ($limit > 0 ?  min($limit - $totalBytesRead, $chunkSize) : $chunkSize);
+
+            $data = fread($stream, $length);
+            $bytesRead = strlen($data);
+
+            $this->appendObject($objectID, $data);
+
+            $totalBytesRead += $bytesRead;
+
+            $reachedLimit = $limit !== 0 ? $totalBytesRead >= $limit : FALSE;
+            $reachedEOF = feof($stream);
+
+        } while (!$reachedLimit && !$reachedEOF);
+
+        return $totalBytesRead;
+    }
+
+    /**
+     * @param string $objectID
      * @param string $data
      * @param int    $offset
      *
      * @return bool
      * @throws \WarriorXK\PHPRados\Exception
      */
-    public function writeObject(string $objectID, string $data, int $offset = -1) : bool {
+    public function writeObject(string $objectID, string $data, int $offset = 0) : bool {
 
-        if ($offset >= 0) {
+        if ($offset > 0) {
             $ret = \rados_write($this->_poolResource, $objectID, $data, $offset);
         } else {
             $ret = \rados_write_full($this->_poolResource, $objectID, $data);
