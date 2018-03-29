@@ -295,6 +295,25 @@ class Pool {
     }
 
     /**
+     * @param int         $limit
+     * @param string|NULL $startObject
+     *
+     * @return string[]
+     * @throws \WarriorXK\PHPRados\Exception
+     */
+    public function listObjects(int $limit = 0, string $startObject = NULL) : array {
+
+        $ret = \rados_objects_list($this->_poolResource, $limit, $startObject);
+
+        $exception = Exception::FromReturnValue($ret);
+        if ($exception !== NULL) {
+            throw $exception;
+        }
+
+        return $ret;
+    }
+
+    /**
      * @param string $srcObjectID
      * @param int    $srcStart
      * @param string $dstObjectID
