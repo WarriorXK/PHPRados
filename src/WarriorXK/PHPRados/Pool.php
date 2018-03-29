@@ -303,7 +303,11 @@ class Pool {
      */
     public function listObjects(int $limit = 0, string $startObject = NULL) : array {
 
-        $ret = \rados_objects_list($this->_poolResource, $limit, $startObject);
+        if ($startObject !== NULL) {
+            $ret = \rados_objects_list($this->_poolResource, $limit, $startObject);
+        } else {
+            $ret = \rados_objects_list($this->_poolResource, $limit);
+        }
 
         $exception = Exception::FromReturnValue($ret);
         if ($exception !== NULL) {
